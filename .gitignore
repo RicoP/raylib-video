@@ -1,3 +1,6 @@
+settings.json
+*.mpeg
+
 # Prerequisites
 *.d
 
