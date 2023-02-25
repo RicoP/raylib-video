@@ -4,6 +4,34 @@
 //
 ///////////////////////////////////////////////////
 
+///////////////////////////////////////////////////
+//
+// How to use:
+//
+//   #include "raylib.h"
+//   #define RAYLIBVIDEO_IMPL
+//   #include <raylibvideo.h>
+//
+//   int main() {
+//     ray_video_t video = ray_video_open("my_video.mpeg");
+// 
+//     while (!WindowShouldClose()) {
+//       ray_video_update(&video, GetFrameTime());
+//       BeginDrawing();
+//         ClearBackground(RAYWHITE);
+//         BeginMode3D(camera);
+//           DrawBillboard(camera, video.texture, (Vector3){0,10,-30}, 20, WHITE);
+//         EndMode3D();
+//       EndDrawing();
+//     }
+//     ray_video_destroy(&video);
+//     return 0;
+//   }
+//
+
+
+
+
 #pragma once
 
 #include <stdio.h>
