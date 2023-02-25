@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------------
 int main(void)
 {
-    ray_video_t video = ray_video_open("../bjork-all-is-full-of-love.mpeg");
+    ray_video_t video = ray_video_open("bjork-all-is-full-of-love.mpeg");
 
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ int main(void)
             DrawRectangle     ( UI(10), UI(10), UI(220), UI(80), Fade(SKYBLUE, 0.8f));
             DrawRectangleLines( UI(10), UI(10), UI(220), UI(80), BLUE);
 
-            DrawText("RAYLIB VIDEO EXAMPLE", UI(20), UI(20), UI(10), BLACK);
+            DrawText(TextFormat("RAYLIB VIDEO EXAMPLE (%.1f FPS)", 1.0f / GetFrameTime()), UI(20), UI(20), UI(10), BLACK);
             DrawText("- Move with keys: W, A, S, D", UI(40), UI(30), UI(10), BLACK);
             DrawText("- Mouse move to look around", UI(40), UI(50), UI(10), BLACK);
             DrawText("- Exit with Escape key", UI(40), UI(70), UI(10), BLACK);
