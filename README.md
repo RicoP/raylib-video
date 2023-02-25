@@ -12,8 +12,13 @@ Contains code from https://github.com/mattiasgustavsson/libs/blob/main/thread.h 
 # Info
 Needs pl_mpeg (https://github.com/phoboslab/pl_mpeg) to be in the include path.
 
-# Examples
-(In windows) double click "examples/download_video_example.bat" then double click "examples/build.bat".
+# How to use
+Check out the header in raylibvideo.h or look into the examples folder.
+
+# How to build Examples
+(In windows) 
+- double click "examples/download_video_example.bat" then
+- double click "examples/build.bat".
 
 # API
 ```c
@@ -26,6 +31,7 @@ void ray_video_destroy(ray_video_t *);
 - Check with ray_video.ok if the video was correctly loaded
 - Update the video with ray_video_update
 - Get the new frame over ray_video.texture
+- Destroy the object at the end with ray_video_destroy
 
 # TODO
 - Add seeking API
