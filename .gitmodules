@@ -1,0 +1,6 @@
+[submodule "example/raylib"]
+	path = example/raylib
+	url = git@github.com:raysan5/raylib.git
+[submodule "example/pl_mpeg"]
+	path = example/pl_mpeg
+	url = git@github.com:phoboslab/pl_mpeg.git
