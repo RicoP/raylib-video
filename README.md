@@ -2,6 +2,8 @@
 A multithreaded and streaming capable pl_mpeg wrapper for Raylib.
 Plays MPEG1 videofiles.
 
+![preview image](example/preview.png)
+
 # License
 MIT-License
 
