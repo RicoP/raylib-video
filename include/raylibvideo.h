@@ -264,7 +264,8 @@ inline void performance_counter_reset(performance_counter_t * c) {
 enum ray_video_update_status {
   RAY_VIDEO_UPDATE_STATUS_NO_UPDATE = 0,
   RAY_VIDEO_UPDATE_STATUS_NEW_FRAME,
-  RAY_VIDEO_UPDATE_STATUS_DONE
+  RAY_VIDEO_UPDATE_STATUS_DONE,
+  RAY_VIDEO_UPDATE_STATUS_ERROR
 };
 
 enum ray_video_state {
@@ -388,6 +389,9 @@ ray_video_t ray_video_open(const char * path) {
 int ray_video_update(ray_video_t * video, double deltatime_s) {
   int state;
   performance_counter_t perf;
+
+  if(!video->ok) return RAY_VIDEO_UPDATE_STATUS_ERROR;
+
   performance_counter_init(&perf);
   state = update_video(video, deltatime_s);
   video->update_time = performance_counter_next_seconds(&perf);

@@ -10,12 +10,14 @@
 //------------------------------------------------------------------------------------
 int main(void)
 {
-    ray_video_t video = ray_video_open("../resources/bjork-all-is-full-of-love.mpeg");
+    ray_video_t video = ray_video_open("../bjork-all-is-full-of-love.mpeg");
 
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+    const int font_scale = 2;
+    #define UI(X) (X * font_scale)
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - video playback");
 
@@ -64,9 +66,6 @@ int main(void)
             BeginMode3D(camera);
 
                 DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY); // Draw ground
-                DrawCubeTexture(video.texture, (Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);     // Draw a blue wall
-                DrawCubeTexture(video.texture, (Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME);      // Draw a green wall
-                DrawCubeTexture(video.texture, (Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);      // Draw a yellow wall
 
                 // Draw some cubes around
                 for (int i = 0; i < MAX_COLUMNS; i++)
@@ -76,16 +75,24 @@ int main(void)
                 }
 
                 // Draw Video as Billboard
-                DrawBillboard(camera, video.texture, (Vector3){0,10,-20}, 15, WHITE);
+                if(video.ok)
+                {
+                    DrawCubeTexture(video.texture, (Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);     // Draw a blue wall
+                    DrawCubeTexture(video.texture, (Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME);      // Draw a green wall
+                    DrawCubeTexture(video.texture, (Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);      // Draw a yellow wall
+                    DrawBillboard(camera, video.texture, (Vector3){0,10,-30}, 20, WHITE);
+                }
 
             EndMode3D();
 
-            DrawRectangle( 10, 10, 220, 70, Fade(SKYBLUE, 0.5f));
-            DrawRectangleLines( 10, 10, 220, 70, BLUE);
+            DrawRectangle     ( UI(10), UI(10), UI(220), UI(80), Fade(SKYBLUE, 0.8f));
+            DrawRectangleLines( UI(10), UI(10), UI(220), UI(80), BLUE);
 
-            DrawText("First person camera default controls:", 20, 20, 10, BLACK);
-            DrawText("- Move with keys: W, A, S, D", 40, 40, 10, DARKGRAY);
-            DrawText("- Mouse move to look around", 40, 60, 10, DARKGRAY);
+            DrawText("RAYLIB VIDEO EXAMPLE", UI(20), UI(20), UI(10), BLACK);
+            DrawText("- Move with keys: W, A, S, D", UI(40), UI(30), UI(10), BLACK);
+            DrawText("- Mouse move to look around", UI(40), UI(50), UI(10), BLACK);
+            DrawText("- Exit with Escape key", UI(40), UI(70), UI(10), BLACK);
+            if(!video.ok) DrawText("COULDN'T FIND THE VIDEO! \nYou must download the example file first. \nDouble click download_video_example.bat in the examples folder.", UI(10), UI(100), UI(10), RED);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
