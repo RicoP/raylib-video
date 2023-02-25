@@ -194,12 +194,14 @@ static inline thread_ptr_t thread_create( int (*thread_proc)( void* ), void* use
 
 // mini perf
 
+#include <stdint.h>
+
 typedef struct performance_counter_t {
   double ticktime_seconds;           // time scaler of the performance counter
   double ticktime_miliseconds;       // time scaler of the performance counter
   double ticktime_nanoseconds;       // time scaler of the performance counter
-  LARGE_INTEGER start_time;  // starting time
-  LARGE_INTEGER end_time;    // ending time
+  int64_t start_time;                // starting time
+  int64_t end_time;                  // ending time
 } performance_counter_t;
 
 inline void performance_counter_init(performance_counter_t * c) {
@@ -213,7 +215,9 @@ inline void performance_counter_init(performance_counter_t * c) {
   c->ticktime_nanoseconds = 1000000.0 / frequency.QuadPart;
 
   // get the starting time
-  QueryPerformanceCounter(&c->start_time);
+  LARGE_INTEGER LL;
+  QueryPerformanceCounter(&LL);
+  c->start_time = LL.QuadPart;
   c->end_time = c->start_time;
 #endif  
 }
@@ -221,23 +225,25 @@ inline void performance_counter_init(performance_counter_t * c) {
 inline void performance_counter_next(performance_counter_t * c) {
   // get the ending time
 #ifdef _WIN32
-  QueryPerformanceCounter(&c->end_time);
+  LARGE_INTEGER LL;
+  QueryPerformanceCounter(&LL);
+  c->end_time = LL.QuadPart;
 #endif  
 }
 
 inline double performance_counter_next_seconds(performance_counter_t * c) {
   performance_counter_next(c);
-  return (c->end_time.QuadPart - c->start_time.QuadPart) * c->ticktime_seconds;
+  return (c->end_time - c->start_time) * c->ticktime_seconds;
 }
 
 inline double performance_counter_next_miliseconds(performance_counter_t * c) {
   performance_counter_next(c);
-  return (c->end_time.QuadPart - c->start_time.QuadPart) * c->ticktime_miliseconds;
+  return (c->end_time - c->start_time) * c->ticktime_miliseconds;
 }
 
 inline double performance_counter_next_nanoseconds(performance_counter_t * c) {
   performance_counter_next(c);
-  return (c->end_time.QuadPart - c->start_time.QuadPart) * c->ticktime_nanoseconds;
+  return (c->end_time - c->start_time) * c->ticktime_nanoseconds;
 }
 
 inline void performance_counter_reset(performance_counter_t * c) {
