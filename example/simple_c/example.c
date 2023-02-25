@@ -1,12 +1,17 @@
 #include "raylib.h"
 
-#define MAX_COLUMNS 20
+#define RAYLIBVIDEO_IMPL
+#include <raylibvideo.h>
+
+#define MAX_COLUMNS 5
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
+    ray_video_t video = ray_video_open("../resources/bjork-all-is-full-of-love.mpeg");
+
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
@@ -29,7 +34,7 @@ int main(void)
 
     for (int i = 0; i < MAX_COLUMNS; i++)
     {
-        heights[i] = (float)GetRandomValue(1, 12);
+        heights[i] = (float)GetRandomValue(1, 4);
         positions[i] = (Vector3){ (float)GetRandomValue(-15, 15), heights[i]/2.0f, (float)GetRandomValue(-15, 15) };
         colors[i] = (Color){ GetRandomValue(20, 255), GetRandomValue(10, 55), 30, 255 };
     }
@@ -47,6 +52,9 @@ int main(void)
         UpdateCamera(&camera);
         //----------------------------------------------------------------------------------
 
+        // update Video
+        ray_video_update(&video, GetFrameTime());
+            
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -56,9 +64,9 @@ int main(void)
             BeginMode3D(camera);
 
                 DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY); // Draw ground
-                DrawCube((Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);     // Draw a blue wall
-                DrawCube((Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME);      // Draw a green wall
-                DrawCube((Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);      // Draw a yellow wall
+                DrawCubeTexture(video.texture, (Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);     // Draw a blue wall
+                DrawCubeTexture(video.texture, (Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME);      // Draw a green wall
+                DrawCubeTexture(video.texture, (Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);      // Draw a yellow wall
 
                 // Draw some cubes around
                 for (int i = 0; i < MAX_COLUMNS; i++)
@@ -66,6 +74,9 @@ int main(void)
                     DrawCube(positions[i], 2.0f, heights[i], 2.0f, colors[i]);
                     DrawCubeWires(positions[i], 2.0f, heights[i], 2.0f, MAROON);
                 }
+
+                // Draw Video as Billboard
+                DrawBillboard(camera, video.texture, (Vector3){0,10,-20}, 15, WHITE);
 
             EndMode3D();
 
@@ -79,6 +90,8 @@ int main(void)
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
+
+    ray_video_destroy(&video);
 
     // De-Initialization
     //--------------------------------------------------------------------------------------

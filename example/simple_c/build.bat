@@ -1,2 +1,13 @@
-CL /TC  /D "ROSE_USE_EA" /D "EA_SSE=4" /D "SOKOL_NO_ENTRY" /D "GRAPHICS_API_OPENGL_33" /D "IMGUI_API=__declspec(dllimport)" /D "DEBUG" /D "EA_DEBUG" /D "BUILD_LIBTYPE_SHARED" /D "BUILD_SHARED_LIBS" /D "PLATFORM_DESKTOP" /D "CloseWindow=RAY_CloseWindow" /D "ShowCursor=RAY_ShowCursor" /D "SUPPORT_TRACELOG_DEBUG" /D "_WINDLL" /D "_MBCS" /I../raylib/src  /I../raylib/src/external  /I../raylib/src/external/glfw/include /I../raylib/src/external/glfw/deps main.c  ../raylib/src/*.c /link "winmm.lib" "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" 
+CL /TC /Ox /DGRAPHICS_API_OPENGL_33 /DPLATFORM_DESKTOP ^
+   /I../raylib/src ^
+   /I../raylib/src/external ^
+   /I../raylib/src/external/glfw/include ^
+   /I../raylib/src/external/glfw/deps ^
+   /I../pl_mpeg ^
+   /I../../include ^
+   example.c ../raylib/src/*.c ^
+   /link user32.lib shell32.lib winmm.lib gdi32.lib
 
+DEL *.exp *.lib *.obj
+
+example.exe
