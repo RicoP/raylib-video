@@ -22,7 +22,7 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "raylib [core] example - video playback");
 
     // Define the camera to look into our 3d world (position, target, up vector)
-    Camera camera = { 0 };
+    Camera3D camera = { 0 };
     camera.position = (Vector3){ 4.0f, 2.0f, 4.0f };
     camera.target = (Vector3){ 0.0f, 1.8f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
