@@ -66,6 +66,16 @@ void ray_video_destroy(ray_video_t *);
 
 #ifdef RAYLIBVIDEO_IMPL
 
+  #if defined( __MINGW32__ ) || defined( __APPLE__ ) || defined( __ANDROID__ ) || defined( __linux__ )
+  #  define RAYLIBVIDEO_PLATFORM_UNIX    1
+  #  define RAYLIBVIDEO_PLATFORM_WINDOWS 0
+  #elif defined( _WIN32 )
+  #  define RAYLIBVIDEO_PLATFORM_UNIX    0
+  #  define RAYLIBVIDEO_PLATFORM_WINDOWS 1
+  #else 
+    #error Unknown platform.
+  #endif
+
 // WINAPI
 #include <stdint.h>
 #if defined(_WIN32) && !defined(_INC_WINDOWS) && !defined(_WINDOWS_)
@@ -158,9 +168,9 @@ typedef union thread_atomic_int64_t
 } thread_atomic_int64_t;
 
 static inline int64_t atomic_cmpxchg( thread_atomic_int64_t* atomic, int64_t expected, int64_t desired ) {
-  #if defined( _WIN32 )
+  #if RAYLIBVIDEO_PLATFORM_WINDOWS
     return _InterlockedCompareExchange64( &atomic->i, desired, expected );
-  #elif defined( __linux__ ) || defined( __APPLE__ ) || defined( __ANDROID__ )
+  #elif RAYLIBVIDEO_PLATFORM_UNIX
     return __sync_val_compare_and_swap( &atomic->i, expected, desired );
   #else 
     #error Unknown platform.
@@ -176,9 +186,9 @@ static inline int64_t atomic_get( thread_atomic_int64_t* atomic ) {
 }
 
 static inline void atomic_set( thread_atomic_int64_t* atomic, int64_t desired ) {
-  #if defined( _WIN32 )
+  #if RAYLIBVIDEO_PLATFORM_WINDOWS
     _InterlockedExchange64( &atomic->i, desired );
-  #elif defined( __linux__ ) || defined( __APPLE__ ) || defined( __ANDROID__ )
+  #elif RAYLIBVIDEO_PLATFORM_UNIX
     __sync_fetch_and_and( &atomic->i, 0 );
     __sync_fetch_and_or( &atomic->i, desired );
   #else 
@@ -195,7 +205,7 @@ static inline int64_t atomic_spin_till_expected( thread_atomic_int64_t* atomic, 
 }
 
 static inline thread_ptr_t thread_create( int (*thread_proc)( void* ), void* user_data, size_t stack_size ) {
-    #if defined( _WIN32 )
+    #if RAYLIBVIDEO_PLATFORM_WINDOWS
     {
         DWORD thread_id;
         HANDLE handle = CreateThread( 
@@ -207,7 +217,7 @@ static inline thread_ptr_t thread_create( int (*thread_proc)( void* ), void* use
         if( !handle ) return NULL;
         return (thread_ptr_t) handle;
     }
-    #elif defined( __linux__ ) || defined( __APPLE__ ) || defined( __ANDROID__ )
+    #elif RAYLIBVIDEO_PLATFORM_UNIX
     {
         pthread_t thread;
         if( 0 != pthread_create( &thread, NULL, ( void* (*)( void * ) ) thread_proc, user_data ) )
@@ -234,7 +244,7 @@ typedef struct performance_counter_t {
 
 inline void performance_counter_init(performance_counter_t * c) {
   memset(c, 0, sizeof(performance_counter_t));
-#ifdef _WIN32
+#if RAYLIBVIDEO_PLATFORM_WINDOWS
   // get the frequency of the performance counter
   LARGE_INTEGER frequency;
   QueryPerformanceFrequency(&frequency);
@@ -252,7 +262,7 @@ inline void performance_counter_init(performance_counter_t * c) {
 
 inline void performance_counter_next(performance_counter_t * c) {
   // get the ending time
-#ifdef _WIN32
+#if RAYLIBVIDEO_PLATFORM_WINDOWS
   LARGE_INTEGER LL;
   QueryPerformanceCounter(&LL);
   c->end_time = LL.QuadPart;
