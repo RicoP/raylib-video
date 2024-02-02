@@ -15,19 +15,21 @@ Needs pl_mpeg (https://github.com/phoboslab/pl_mpeg) to be in the include path.
 # How to use
 Check out the header in raylibvideo.h or look into the examples folder.
 
-# How to build Examples
-(In windows) 
-- double click "examples/download_video_example.bat" then
-- double click "examples/build.bat".
-(In MinGW) 
-- double click "examples/download_video_example.sh" then
-- double click "examples/build.sh".
-
-Don't forget to pull all submodules after cloning this repo
-
+run
 ```
 git submodule update --init
 ```
+
+Then build 
+
+## For Windows 
+- double click "examples/download_video_example.bat" then
+- double click "examples/build.bat".
+
+## For MinGW
+- run "examples/download_video_example.sh" then
+- run "examples/build.sh".
+
 # API
 ```c
 ray_video_t ray_video_open(const char * path);
