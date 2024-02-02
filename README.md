@@ -20,6 +20,11 @@ Check out the header in raylibvideo.h or look into the examples folder.
 - double click "examples/download_video_example.bat" then
 - double click "examples/build.bat".
 
+Don't forget to pull all submodules after cloning this repo
+
+```
+git submodule update --init
+```
 # API
 ```c
 ray_video_t ray_video_open(const char * path);
