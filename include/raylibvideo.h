@@ -152,7 +152,7 @@ MW_EXTERN BOOL WINAPI QueryPerformanceFrequency(LARGE_INTEGER*);
 // Multithreading
 
 #include <stdint.h>
-#ifndef _WIN32
+#if RAYLIBVIDEO_PLATFORM_UNIX
 #include <pthread.h>
 #endif
 
