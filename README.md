@@ -19,6 +19,9 @@ Check out the header in raylibvideo.h or look into the examples folder.
 (In windows) 
 - double click "examples/download_video_example.bat" then
 - double click "examples/build.bat".
+(In MinGW) 
+- double click "examples/download_video_example.sh" then
+- double click "examples/build.sh".
 
 Don't forget to pull all submodules after cloning this repo
 
